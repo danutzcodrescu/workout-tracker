@@ -1,0 +1,29 @@
+ports:
+  - port: 8080
+
+tasks:
+  - name: setup
+    before: |
+      printf "\n[settings]\napi_key = $WAKATIME\n" > ~/.wakatime.cfg 
+    init: yarn install
+    command: yarn run start && go run
+
+vscode:
+  extensions:
+    - "golang.Go"
+    - "nrwl.angular-console"
+    - 'streetsidesoftware.code-spell-checker'
+    - 'naumovs.color-highlight'
+    - 'dbaeumer.vscode-eslint'
+    - 'eamodio.gitlens'
+    - 'oderwat.indent-rainbow'
+    - 'christian-kohler.npm-intellisense'
+    - 'christian-kohler.path-intellisense'
+    - 'esbenp.prettier-vscode'
+    - 'meganrogge.template-string-converter'
+    - 'WakaTime.vscode-wakatime'
+
+github:
+  prebuilds:
+    pullRequests: false
+    addCheck: false
