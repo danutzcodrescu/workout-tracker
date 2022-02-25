@@ -22,3 +22,8 @@ vscode:
     - 'esbenp.prettier-vscode'
     - 'meganrogge.template-string-converter'
     - 'WakaTime.vscode-wakatime'
+
+github:
+  prebuilds:
+    pullRequests: false
+    addCheck: false
