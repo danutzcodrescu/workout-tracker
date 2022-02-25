@@ -1,17 +1,17 @@
 package api_activity
 
 import (
-	"os"
+	"io/ioutil"
 	"reflect"
 	"testing"
 )
 
 func TestParseActivityFile(t *testing.T) {
-	workout, err := os.ReadFile("../../../tools/testFiles/workout.tcx")
+	workout, err := ioutil.ReadFile("../../../tools/testFiles/workout.tcx")
 	if err != nil {
 		t.Errorf("cannot parse workout file file")
 	}
-	workoutWitoutWatts, err := os.ReadFile("../../../tools/testFiles/workoutWithoutWatts.tcx")
+	workoutWitoutWatts, err := ioutil.ReadFile("../../../tools/testFiles/workoutWithoutWatts.tcx")
 	if err != nil {
 		t.Errorf("cannot parse workout without watts file file")
 	}
