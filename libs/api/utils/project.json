@@ -1,0 +1,14 @@
+{
+  "root": "libs/api/utils",
+  "projectType": "library",
+  "sourceRoot": "libs/api/utils",
+  "targets": {
+    "test": {
+      "executor": "@nx-go/nx-go:test"
+    },
+    "lint": {
+      "executor": "@nx-go/nx-go:lint"
+    }
+  },
+  "tags": []
+}
