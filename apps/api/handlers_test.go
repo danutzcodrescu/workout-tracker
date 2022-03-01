@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -9,8 +10,10 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"reflect"
 	"strings"
 	"testing"
+	api_activity "workout-tracker/libs/api/activity"
 	api_utils "workout-tracker/libs/api/utils"
 )
 
@@ -21,6 +24,57 @@ var app = &api_utils.Application{
 
 const methodNotAllowedBody = "Method not allowed"
 const wrongFormField = "The form does not contain any file under activity form field"
+
+var expectedWorkout = &api_activity.Workout{Date: "2022-02-24T13:39:00Z", Laps: []api_activity.WorkoutLap{
+	{
+		StartTime:        "2022-02-24T13:39:00Z",
+		TotalTimeSeconds: 60,
+		DistanceMeters:   244,
+		Calories:         16,
+		Intensity:        "Active",
+		Efforts: []api_activity.Effort{
+			{
+				Time:           1,
+				DistanceMeters: 4,
+				Cadence:        0,
+				Watts:          61,
+			},
+			{
+				Time:           2,
+				DistanceMeters: 8,
+				Cadence:        0,
+				Watts:          61,
+			},
+			{
+				Time:           58,
+				DistanceMeters: 238,
+				Cadence:        22,
+				Watts:          201,
+			},
+		},
+	},
+	{
+		StartTime:        "2022-02-24T13:40:00Z ",
+		TotalTimeSeconds: 60,
+		DistanceMeters:   172,
+		Calories:         9,
+		Intensity:        "Resting",
+		Efforts: []api_activity.Effort{
+			{
+				Time:           2,
+				DistanceMeters: 11,
+				Cadence:        22,
+				Watts:          201,
+			},
+			{
+				Time:           58,
+				DistanceMeters: 172,
+				Cadence:        22,
+				Watts:          63,
+			},
+		},
+	},
+}}
 
 func TestUploadActivity(t *testing.T) {
 	workout, err := os.Open("../../tools/testFiles/workout.tcx")
@@ -64,6 +118,13 @@ func TestUploadActivity(t *testing.T) {
 			t.Errorf("want %d; got %d", http.StatusOK, resp.StatusCode)
 		}
 		defer resp.Body.Close()
+		result := api_activity.Workout{}
+		if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+			log.Fatalln(err)
+		}
+		if reflect.DeepEqual(result, expectedWorkout) {
+			t.Errorf("want %+v; got %+v", expectedWorkout, result)
+		}
 	})
 
 	for _, tt := range testsMethodNotAllowed {
