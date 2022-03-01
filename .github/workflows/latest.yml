@@ -1,20 +1,21 @@
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - main
 jobs:
-  pr:
+  main:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 0
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2
         with:
           node-version: '16'
           cache: 'yarn'
       - uses: actions/setup-go@v2
       - run: yarn install
-      - run: npx nx affected --target=test --parallel=3
+      # - run: npx nx affected --target=build --parallel=3
+      - run: npx nx run-many --target=test --parallel=3 --all
