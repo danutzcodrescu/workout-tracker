@@ -1,8 +1,8 @@
 {
-  "name": "api-utils",
+  "name": "api-http",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "sourceRoot": "libs/api/utils",
+  "sourceRoot": "libs/api/http",
   "targets": {
     "test": {
       "executor": "@nx-go/nx-go:test"
