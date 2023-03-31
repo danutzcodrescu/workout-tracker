@@ -1,4 +1,4 @@
-package api_activity
+package api_controllers
 
 import (
 	"encoding/xml"
@@ -84,16 +84,19 @@ func ParseActivityFile(fileBytes []byte) (Workout, error) {
 		workoutLap := WorkoutLap{Intensity: lap.Intensity, StartTime: lap.StartTime}
 		workoutLap.Calories, err = strconv.Atoi(lap.Calories)
 		if err != nil {
+			// TODO: add it to app logging
 			log.Println(err, "calories parsing")
 			return Workout{}, err
 		}
 		workoutLap.DistanceMeters, err = strconv.Atoi(lap.DistanceMeters)
 		if err != nil {
+			// TODO: add it to app logging
 			log.Println(err, "distance rowed")
 			return Workout{}, err
 		}
 		workoutLap.TotalTimeSeconds, err = strconv.Atoi(lap.TotalTimeSeconds)
 		if err != nil {
+			// TODO: add it to app logging
 			log.Println(err, "rowed time")
 			return Workout{}, err
 		}
@@ -101,21 +104,25 @@ func ParseActivityFile(fileBytes []byte) (Workout, error) {
 			workoutEffort := Effort{}
 			startTime, err := time.Parse(dateFormat, strings.TrimRight(lap.StartTime, " "))
 			if err != nil {
+				// TODO: add it to app logging
 				log.Println(err)
 				return Workout{}, err
 			}
 			effortTime, err := time.Parse(dateFormat, effort.Time)
 			if err != nil {
+				// TODO: add it to app logging
 				log.Println(err)
 				return Workout{}, err
 			}
 			workoutEffort.Cadence, err = strconv.Atoi(effort.Cadence)
 			if err != nil {
+				// TODO: add it to app logging
 				log.Println(err, "cadence")
 				return Workout{}, err
 			}
 			workoutEffort.DistanceMeters, err = strconv.Atoi(effort.DistanceMeters)
 			if err != nil {
+				// TODO: add it to app logging
 				log.Println(err, "distance per effort")
 				return Workout{}, err
 			}
@@ -124,6 +131,7 @@ func ParseActivityFile(fileBytes []byte) (Workout, error) {
 			} else {
 				workoutEffort.Watts, err = strconv.Atoi(effort.Extensions.TPX.Watts)
 				if err != nil {
+					// TODO: add it to app logging
 					log.Println(err, "wats", effort.Time)
 					return Workout{}, err
 				}
