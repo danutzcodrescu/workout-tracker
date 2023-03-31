@@ -1,17 +1,14 @@
 {
-  "npmScope": "workout-tracker",
-  "affected": {
-    "defaultBase": "main"
-  },
-  "cli": {
-    "defaultCollection": "@nrwl/workspace"
-  },
   "implicitDependencies": {
-    "package.json": {
-      "dependencies": "*",
-      "devDependencies": "*"
-    },
-    ".eslintrc.json": "*"
+    "go.mod": "*"
+  },
+  "npmScope": "go-playground",
+  "targetDefaults": {
+    "build": {
+      "dependsOn": [
+        "^build"
+      ]
+    }
   },
   "tasksRunnerOptions": {
     "default": {
@@ -23,16 +20,8 @@
           "test",
           "e2e"
         ],
-        "accessToken": "MjJlZTE4YzEtYjk0OS00OWEzLThkMzEtNjdmZGM4ZWJmOTM0fHJlYWQtd3JpdGU="
+        "accessToken": "ZDY1NGRiZjEtNGZjNS00ZWViLTlkYzAtYjgyM2QzMTI5ZWQ3fHJlYWQtd3JpdGU="
       }
     }
-  },
-  "targetDependencies": {
-    "build": [
-      {
-        "target": "build",
-        "projects": "dependencies"
-      }
-    ]
   }
 }

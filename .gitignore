@@ -23,6 +23,8 @@
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+!.vscode/thunder-client/thunder-tests/*.json
+
 
 # misc
 /.sass-cache
@@ -37,3 +39,5 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+test.tcx

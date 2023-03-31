@@ -1,7 +1,8 @@
 {
-  "root": "libs/api/utils",
+  "name": "api-controllers",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "sourceRoot": "libs/api/utils",
+  "sourceRoot": "libs/api-controllers",
   "targets": {
     "test": {
       "executor": "@nx-go/nx-go:test"
@@ -10,5 +11,7 @@
       "executor": "@nx-go/nx-go:lint"
     }
   },
-  "tags": []
+  "tags": [
+    "api"
+  ]
 }

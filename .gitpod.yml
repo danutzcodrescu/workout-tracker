@@ -4,14 +4,14 @@ ports:
 tasks:
   - name: setup
     before: |
-      printf "\n[settings]\napi_key = $WAKATIME\n" > ~/.wakatime.cfg 
-    init: yarn install
-    command: yarn run start && go run
+      printf "\n[settings]\napi_key = $WAKATIME\n" > ~/.wakatime.cfg
+    init: yarn install && go mod tidy && go mod vendor
+    command: yarn run nx run api:serve
 
 vscode:
   extensions:
-    - "golang.Go"
-    - "nrwl.angular-console"
+    - 'golang.Go'
+    - 'nrwl.angular-console'
     - 'streetsidesoftware.code-spell-checker'
     - 'naumovs.color-highlight'
     - 'dbaeumer.vscode-eslint'
