@@ -3,6 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/api-utils",
+
   "targets": {
     "test": {
       "executor": "@nx-go/nx-go:test"
@@ -11,7 +12,5 @@
       "executor": "@nx-go/nx-go:lint"
     }
   },
-  "tags": [
-    "api"
-  ]
+  "tags": ["api"]
 }
