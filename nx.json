@@ -1,27 +1,34 @@
 {
-  "implicitDependencies": {
-    "go.mod": "*"
+  "affected": {
+    "defaultBase": "main"
   },
-  "npmScope": "go-playground",
+  "targetDependencies": {
+    "build": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      }
+    ]
+  },
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "sharedGlobals": [],
+    "production": ["default"]
+  },
   "targetDefaults": {
     "build": {
-      "dependsOn": [
-        "^build"
-      ]
+      "inputs": ["production", "^production"],
+      "cache": true
+    },
+    "lint": {
+      "cache": true
+    },
+    "test": {
+      "cache": true
+    },
+    "e2e": {
+      "cache": true
     }
   },
-  "tasksRunnerOptions": {
-    "default": {
-      "runner": "@nrwl/nx-cloud",
-      "options": {
-        "cacheableOperations": [
-          "build",
-          "lint",
-          "test",
-          "e2e"
-        ],
-        "accessToken": "ZDY1NGRiZjEtNGZjNS00ZWViLTlkYzAtYjgyM2QzMTI5ZWQ3fHJlYWQtd3JpdGU="
-      }
-    }
-  }
+  "nxCloudAccessToken": "MjJlZTE4YzEtYjk0OS00OWEzLThkMzEtNjdmZGM4ZWJmOTM0fHJlYWQtd3JpdGU="
 }
