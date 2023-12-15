@@ -26,5 +26,5 @@
       "executor": "@nx-go/nx-go:lint"
     }
   },
-  "tags": []
+  "tags": ["api"]
 }

@@ -11,7 +11,6 @@
     "migrate": "node -r esbuild-register ./tools/migrations/migrate.ts"
   },
   "private": true,
-  "dependencies": {},
   "devDependencies": {
     "@nx-go/nx-go": "^2.2.0",
     "@nx/workspace": "17.2.3",

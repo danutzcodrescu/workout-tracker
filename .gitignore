@@ -23,6 +23,8 @@
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+!.vscode/thunder-client/thunder-tests/*.json
+
 
 # misc
 /.sass-cache
@@ -40,6 +42,5 @@ Thumbs.db
 
 test.tcx
 .env*
-
 
 .nx/cache
