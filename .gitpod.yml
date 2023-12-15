@@ -5,7 +5,8 @@ tasks:
   - name: setup
     before: |
       printf "\n[settings]\napi_key = $WAKATIME\n" > ~/.wakatime.cfg
-    init: yarn install && go mod tidy && go mod vendor
+      echo -e "DB_USER = $DB_USER_WORKOUTS\nDB_PASSWORD = $DB_PASSWORD_WORKOUTS\n DB_HOST = $DB_HOST_WORKOUTS\nDB_NAME= $DB_NAME_WORKOUTS" >> .env
+    init: yarn install && go mod tidy
     command: yarn run nx run api:serve
 
 vscode:
@@ -22,8 +23,4 @@ vscode:
     - 'esbenp.prettier-vscode'
     - 'meganrogge.template-string-converter'
     - 'WakaTime.vscode-wakatime'
-
-github:
-  prebuilds:
-    pullRequests: false
-    addCheck: false
+    - 'rangav.vscode-thunder-client'

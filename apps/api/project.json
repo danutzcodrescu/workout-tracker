@@ -16,7 +16,7 @@
       "options": {
         "cmd": "gow",
         "cwd": ".",
-        "main": "apps/api/main.go"
+        "main": "./apps/api/main.go"
       }
     },
     "test": {
