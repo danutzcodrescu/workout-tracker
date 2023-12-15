@@ -1,4 +1,4 @@
-package api_utils
+package api_controllers
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ type Application struct {
 	Repositories api_repositories.Repositories
 }
 
-func ServerError(w http.ResponseWriter, err error, msg string) func(*Application) {
+func serverError(w http.ResponseWriter, err error, msg string) func(*Application) {
 	return func(app *Application) {
 		trace := fmt.Sprint(msg, "\n", err.Error())
 		app.ErrorLog.Println(trace)
@@ -22,7 +22,7 @@ func ServerError(w http.ResponseWriter, err error, msg string) func(*Application
 
 }
 
-func ClientError(w http.ResponseWriter, err error, errorText string) func(*Application) {
+func clientError(w http.ResponseWriter, err error, errorText string) func(*Application) {
 	return func(app *Application) {
 		app.ErrorLog.Println(err)
 		http.Error(w, errorText, http.StatusBadRequest)

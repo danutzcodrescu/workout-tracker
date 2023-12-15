@@ -1,10 +1,9 @@
-package api_utils
+package api_controllers
 
 import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"net/http/httptest"
@@ -30,13 +29,13 @@ func TestServerError(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			w := httptest.NewRecorder()
-			ServerError(w, errors.New("test error"), "test error body")(app)
+			serverError(w, errors.New("test error"), "test error body")(app)
 			res := w.Result()
 			defer res.Body.Close()
 			if res.StatusCode != tt.wantCode {
 				t.Errorf("want %d; got %d", tt.wantCode, res.StatusCode)
 			}
-			data, err := ioutil.ReadAll(res.Body)
+			data, err := io.ReadAll(res.Body)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -59,13 +58,13 @@ func TestClientError(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			w := httptest.NewRecorder()
-			ClientError(w, errors.New("test error"), string(tt.wantBody))(app)
+			clientError(w, errors.New("test error"), string(tt.wantBody))(app)
 			res := w.Result()
 			defer res.Body.Close()
 			if res.StatusCode != tt.wantCode {
 				t.Errorf("want %d; got %d", tt.wantCode, res.StatusCode)
 			}
-			data, err := ioutil.ReadAll(res.Body)
+			data, err := io.ReadAll(res.Body)
 			if err != nil {
 				t.Fatal(err)
 			}

@@ -1,4 +1,4 @@
-package main
+package api_controllers
 
 import (
 	"bytes"
@@ -13,11 +13,10 @@ import (
 	"reflect"
 	"strings"
 	"testing"
-	api_activity "workout-tracker/libs/api/activity"
 	api_utils "workout-tracker/libs/api/utils"
 )
 
-var app = &api_utils.Application{
+var application = &Application{
 	ErrorLog: log.New(io.Discard, "", 0),
 	InfoLog:  log.New(io.Discard, "", 0),
 }
@@ -25,14 +24,14 @@ var app = &api_utils.Application{
 const methodNotAllowedBody = "Method not allowed"
 const wrongFormField = "The form does not contain any file under activity form field"
 
-var expectedWorkout = &api_activity.Workout{Date: "2022-02-24T13:39:00Z", Laps: []api_activity.WorkoutLap{
+var expectedWorkout = &api_utils.Workout{Date: "2022-02-24T13:39:00Z", Laps: []api_utils.WorkoutLap{
 	{
 		StartTime:        "2022-02-24T13:39:00Z",
 		TotalTimeSeconds: 60,
 		DistanceMeters:   244,
 		Calories:         16,
 		Intensity:        "Active",
-		Efforts: []api_activity.Effort{
+		Efforts: []api_utils.Effort{
 			{
 				Time:           1,
 				DistanceMeters: 4,
@@ -59,7 +58,7 @@ var expectedWorkout = &api_activity.Workout{Date: "2022-02-24T13:39:00Z", Laps: 
 		DistanceMeters:   172,
 		Calories:         9,
 		Intensity:        "Resting",
-		Efforts: []api_activity.Effort{
+		Efforts: []api_utils.Effort{
 			{
 				Time:           2,
 				DistanceMeters: 11,
@@ -110,7 +109,7 @@ func TestUploadActivity(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		uploadHandler(app)(rr, r)
+		UploadActivityController(application)(rr, r)
 
 		resp := rr.Result()
 
@@ -118,7 +117,7 @@ func TestUploadActivity(t *testing.T) {
 			t.Errorf("want %d; got %d", http.StatusOK, resp.StatusCode)
 		}
 		defer resp.Body.Close()
-		result := api_activity.Workout{}
+		result := api_utils.Workout{}
 		if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 			log.Fatalln(err)
 		}
@@ -135,7 +134,7 @@ func TestUploadActivity(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			uploadHandler(app)(rr, r)
+			UploadActivityController(application)(rr, r)
 
 			resp := rr.Result()
 
@@ -170,7 +169,7 @@ func TestUploadActivity(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		uploadHandler(app)(rr, r)
+		UploadActivityController(application)(rr, r)
 
 		resp := rr.Result()
 

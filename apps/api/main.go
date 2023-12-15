@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	api_controllers "workout-tracker/libs/api/controllers"
 	api_repositories "workout-tracker/libs/api/repositories"
-	api_utils "workout-tracker/libs/api/utils"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
@@ -22,9 +22,9 @@ type Settings struct {
 
 const PORT = 8080
 
-func setupRoutes(app *api_utils.Application) *http.ServeMux {
+func setupRoutes(app *api_controllers.Application) *http.ServeMux {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/upload-activity", uploadHandler(app))
+	mux.HandleFunc("/upload-activity", api_controllers.UploadActivityController(app))
 	return mux
 }
 
@@ -59,7 +59,7 @@ func main() {
 	errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 	env := setupEnv()
 	db := setupDB(env.db_user, env.db_password, env.db_host, env.db_name)
-	app := &api_utils.Application{ErrorLog: errorLog, InfoLog: infoLog, Repositories: api_repositories.SetupRepositories(db)}
+	app := &api_controllers.Application{ErrorLog: errorLog, InfoLog: infoLog, Repositories: api_repositories.SetupRepositories(db)}
 	mux := setupRoutes(app)
 	log.Printf("Starting server at port %d\n", PORT)
 	if err := http.ListenAndServe(":"+fmt.Sprintf("%d", PORT), mux); err != nil {
