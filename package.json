@@ -5,18 +5,22 @@
   "scripts": {
     "start": "nx serve",
     "build": "nx build",
-    "test": "nx test"
+    "test": "nx test",
+    "sql-migration": "drizzle-kit generate:pg --config=./tools/migrations/drizzle.config.ts",
+    "sql-push": "drizzle-kit push:pg --config=./tools/migrations/drizzle.config.ts",
+    "migrate": "node -r esbuild-register ./tools/migrations/migrate.ts"
   },
   "private": true,
   "dependencies": {},
   "devDependencies": {
-    "@nrwl/cli": "13.8.3",
-    "@nrwl/nx-cloud": "latest",
-    "@nrwl/tao": "13.8.3",
-    "@nrwl/workspace": "13.8.3",
     "@nx-go/nx-go": "^2.2.0",
     "@nx/workspace": "17.2.3",
-    "@types/node": "16.11.7",
+    "dotenv": "^16.3.1",
+    "drizzle-kit": "^0.20.6",
+    "drizzle-orm": "^0.29.1",
+    "esbuild": "^0.19.9",
+    "esbuild-register": "^3.5.0",
+    "postgres": "^3.4.3",
     "prettier": "^2.5.1",
     "typescript": "^5.3"
   }
