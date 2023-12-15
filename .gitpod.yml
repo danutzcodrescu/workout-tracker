@@ -6,13 +6,13 @@ tasks:
     before: |
       printf "\n[settings]\napi_key = $WAKATIME\n" > ~/.wakatime.cfg
       echo -e "DB_USER = $DB_USER_WORKOUTS\nDB_PASSWORD = $DB_PASSWORD_WORKOUTS\n DB_HOST = $DB_HOST_WORKOUTS\nDB_NAME= $DB_NAME_WORKOUTS" >> .env
-    init: yarn install && go mod tidy && go mod vendor
+    init: yarn install && go mod tidy
     command: yarn run nx run api:serve
 
 vscode:
   extensions:
-    - "golang.Go"
-    - "nrwl.angular-console"
+    - 'golang.Go'
+    - 'nrwl.angular-console'
     - 'streetsidesoftware.code-spell-checker'
     - 'naumovs.color-highlight'
     - 'dbaeumer.vscode-eslint'
@@ -24,8 +24,3 @@ vscode:
     - 'meganrogge.template-string-converter'
     - 'WakaTime.vscode-wakatime'
     - 'rangav.vscode-thunder-client'
-
-github:
-  prebuilds:
-    pullRequests: false
-    addCheck: false

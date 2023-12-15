@@ -1,31 +1,6 @@
 {
-  "npmScope": "workout-tracker",
   "affected": {
     "defaultBase": "main"
-  },
-  "cli": {
-    "defaultCollection": "@nrwl/workspace"
-  },
-  "implicitDependencies": {
-    "package.json": {
-      "dependencies": "*",
-      "devDependencies": "*"
-    },
-    ".eslintrc.json": "*"
-  },
-  "tasksRunnerOptions": {
-    "default": {
-      "runner": "@nrwl/nx-cloud",
-      "options": {
-        "cacheableOperations": [
-          "build",
-          "lint",
-          "test",
-          "e2e"
-        ],
-        "accessToken": "MjJlZTE4YzEtYjk0OS00OWEzLThkMzEtNjdmZGM4ZWJmOTM0fHJlYWQtd3JpdGU="
-      }
-    }
   },
   "targetDependencies": {
     "build": [
@@ -34,5 +9,26 @@
         "projects": "dependencies"
       }
     ]
-  }
+  },
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "sharedGlobals": [],
+    "production": ["default"]
+  },
+  "targetDefaults": {
+    "build": {
+      "inputs": ["production", "^production"],
+      "cache": true
+    },
+    "lint": {
+      "cache": true
+    },
+    "test": {
+      "cache": true
+    },
+    "e2e": {
+      "cache": true
+    }
+  },
+  "nxCloudAccessToken": "MjJlZTE4YzEtYjk0OS00OWEzLThkMzEtNjdmZGM4ZWJmOTM0fHJlYWQtd3JpdGU="
 }
