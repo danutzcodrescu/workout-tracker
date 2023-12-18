@@ -8,6 +8,8 @@ import (
 	api_controllers "workout-tracker/libs/api/controllers"
 	api_repositories "workout-tracker/libs/api/repositories"
 
+	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/chi/v5"
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
@@ -22,10 +24,17 @@ type Settings struct {
 
 const PORT = 8080
 
-func setupRoutes(app *api_controllers.Application) *http.ServeMux {
-	mux := http.NewServeMux()
-	mux.HandleFunc("/upload-activity", api_controllers.UploadActivityController(app))
-	return mux
+func setupRoutes(app *api_controllers.Application) *chi.Mux {
+	r := chi.NewRouter()
+	r.Use(middleware.Logger)
+
+	r.Route("/v1/activities", func(r chi.Router) {
+		r.Get("/upload", api_controllers.UploadActivityController(app))
+		r.Get("/{articleDate}", api_controllers.RetrieveActivity(app))
+		r.Get("/", api_controllers.RetrieveActivities(app))
+	})
+
+	return r
 }
 
 func setupDB(user string, password string, host string, dbName string) *sqlx.DB {
@@ -59,9 +68,9 @@ func main() {
 	env := setupEnv()
 	db := setupDB(env.db_user, env.db_password, env.db_host, env.db_name)
 	app := &api_controllers.Application{ErrorLog: errorLog, InfoLog: infoLog, Repositories: api_repositories.SetupRepositories(db)}
-	mux := setupRoutes(app)
+	router := setupRoutes(app)
 	log.Printf("Starting server at port %d\n", PORT)
-	if err := http.ListenAndServe(":"+fmt.Sprintf("%d", PORT), mux); err != nil {
+	if err := http.ListenAndServe("localhost:"+fmt.Sprintf("%d", PORT), router); err != nil {
 		log.Fatal(err)
 	}
 }

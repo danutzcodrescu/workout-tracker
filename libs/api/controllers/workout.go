@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	api_repositories "workout-tracker/libs/api/repositories"
 	api_utils "workout-tracker/libs/api/utils"
 )
 
@@ -96,11 +97,6 @@ func parseActivityFile(fileBytes []byte) (api_utils.Workout, error) {
 
 func UploadActivityController(application *Application) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != "POST" {
-			w.Header().Set("Allow", http.MethodPost)
-			http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
-			return
-		}
 		r.Body = http.MaxBytesReader(w, r.Body, max_upload_size)
 		if err := r.ParseMultipartForm(max_upload_size); err != nil {
 			clientError(w, err, fmt.Sprintln("The uploaded file is too big. Please choose an file that's less than", file_size_in_mb, "MB in size."))(application)
@@ -124,5 +120,71 @@ func UploadActivityController(application *Application) http.HandlerFunc {
 		}
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(activityWorkout)
+	}
+}
+
+func RetrieveActivities(application *Application) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		params := r.URL.Query()
+
+		limitParam := params.Get("limit")
+		if limitParam == "" {
+			limitParam = "10"
+		}
+		limit, err := strconv.Atoi(limitParam)
+		if err != nil {
+			serverError(w, err, "Error parsing limit")(application)
+		}
+
+		offsetParam := params.Get("offset")
+		if offsetParam == "" {
+			offsetParam = "0"
+		}
+		offset, err := strconv.Atoi(offsetParam)
+		if err != nil {
+			serverError(w, err, "Error parsing offset")(application)
+		}
+
+		orderBy := params.Get("orderBy")
+		if orderBy == "" {
+			orderBy = "date"
+		}
+
+		orderDirection := params.Get("orderDirection")
+		if orderDirection == "" {
+			orderDirection = "DESC"
+		}
+
+		activities, err := application.Repositories.Activity.Get(api_repositories.GetAllParams{
+			Limit:          limit,
+			Offset:         offset,
+			OrderBy:        orderBy,
+			OrderDirection: orderDirection,
+		})
+		if err != nil {
+			serverError(w, err, "Error retrieving activities")(application)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(activities)
+	}
+}
+
+func RetrieveActivity(application *Application) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		activityDate := strings.TrimPrefix(r.URL.Path, "/v1/activities/")
+
+		activity, err := application.Repositories.Activity.GetByDate(activityDate)
+		if err != nil && err.Error() == "sql: no rows in result set" {
+			notFoundError(w, err, "Activity not found")(application)
+			return
+		}
+
+		if err != nil {
+			serverError(w, err, "Error retrieving activity")(application)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(activity)
 	}
 }
