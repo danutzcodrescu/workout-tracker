@@ -1,6 +1,9 @@
 package api_utils
 
-import "encoding/xml"
+import (
+	"encoding/json"
+	"encoding/xml"
+)
 
 type TrainingCenterDatabase struct {
 	XMLName    xml.Name   `xml:"TrainingCenterDatabase"`
@@ -69,4 +72,17 @@ type Effort struct {
 	DistanceMeters int `json:"distanceMeters"`
 	Cadence        int `json:"cadence"`
 	Watts          int `json:"watts"`
+}
+
+type WorkoutData struct {
+	Date     string `json:"date"`
+	Distance int    `json:"distance"`
+	Time     string `json:"time"`
+	Calories int    `json:"calories"`
+	Pace     string `json:"pace"`
+}
+
+type WorkoutWithLaps struct {
+	Laps json.RawMessage `json:"laps"`
+	WorkoutData
 }

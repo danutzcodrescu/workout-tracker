@@ -29,3 +29,10 @@ func clientError(w http.ResponseWriter, err error, errorText string) func(*Appli
 	}
 
 }
+
+func notFoundError(w http.ResponseWriter, err error, errorText string) func(*Application) {
+	return func(app *Application) {
+		app.ErrorLog.Println(err)
+		http.NotFound(w, nil)
+	}
+}
