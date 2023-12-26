@@ -7,6 +7,7 @@ import (
 	"os"
 	api_controllers "workout-tracker/libs/api/controllers"
 	api_repositories "workout-tracker/libs/api/repositories"
+	api_utils "workout-tracker/libs/api/utils"
 
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
@@ -28,10 +29,18 @@ func setupRoutes(app *api_controllers.Application) *chi.Mux {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 
-	r.Route("/v1/activities", func(r chi.Router) {
-		r.Get("/upload", api_controllers.UploadActivityController(app))
-		r.Get("/{articleDate}", api_controllers.RetrieveActivity(app))
+	r.Route(fmt.Sprintf("/%s/activities", api_utils.ACTIVITY_API_VERSION), func(r chi.Router) {
+		r.Post("/upload", api_controllers.UploadActivityController(app))
+		r.Get("/{activityDate}", api_controllers.RetrieveActivity(app))
 		r.Get("/", api_controllers.RetrieveActivities(app))
+		r.Patch("/{activityDate}", api_controllers.LinkActivityWithGroup(app))
+	})
+
+	r.Route(fmt.Sprintf("/%s/groups", api_utils.GROUP_API_VERSION), func(r chi.Router) {
+		r.Get("/", api_controllers.GetGroups(app))
+		r.Post("/", api_controllers.CreateGroup(app))
+		r.Get("/{groupId}", api_controllers.GetGroup(app))
+		r.Patch("/{groupId}", api_controllers.UpdateGroup(app))
 	})
 
 	return r
