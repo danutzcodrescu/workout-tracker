@@ -14,6 +14,10 @@ import (
 	api_utils "workout-tracker/libs/api/utils"
 )
 
+type LinkActivityWithGroupBody struct {
+	GroupId int `json:"groupId"`
+}
+
 const dateFormat = "2006-01-02T15:04:05Z"
 
 const file_size_in_mb = 3
@@ -171,7 +175,7 @@ func RetrieveActivities(application *Application) http.HandlerFunc {
 
 func RetrieveActivity(application *Application) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		activityDate := strings.TrimPrefix(r.URL.Path, "/v1/activities/")
+		activityDate := strings.TrimPrefix(r.URL.Path, fmt.Sprintf("/%s/activities/", api_utils.ACTIVITY_API_VERSION))
 
 		activity, err := application.Repositories.Activity.GetByDate(activityDate)
 		if err != nil && err.Error() == "sql: no rows in result set" {
@@ -184,6 +188,25 @@ func RetrieveActivity(application *Application) http.HandlerFunc {
 			return
 		}
 
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(activity)
+	}
+}
+
+func LinkActivityWithGroup(application *Application) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var body = LinkActivityWithGroupBody{}
+		err := json.NewDecoder(r.Body).Decode(&body)
+		if err != nil {
+			serverError(w, err, "Error parsing group id")(application)
+			return
+		}
+		activityDate := strings.TrimPrefix(r.URL.Path, fmt.Sprintf("/%s/activities/", api_utils.ACTIVITY_API_VERSION))
+		activity, err := application.Repositories.Activity.SetGroupId(activityDate, body.GroupId)
+		if err != nil {
+			serverError(w, err, "Error linking activity with group")(application)
+			return
+		}
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(activity)
 	}

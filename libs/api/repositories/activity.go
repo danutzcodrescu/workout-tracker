@@ -38,3 +38,9 @@ func (r ActivityRepository) GetByDate(date string) (api_utils.WorkoutWithLaps, e
 	err := r.DB.Get(&activity, "SELECT date, calories, distance, to_char(duration * interval '1 second', 'MI:SS.MS') as time, to_char(pace * interval '1 second', 'MI:SS.MS') as pace, laps FROM workouts.activities WHERE date=$1", date)
 	return activity, err
 }
+
+func (r ActivityRepository) SetGroupId(date string, groupId int) (api_utils.WorkoutData, error) {
+	activity := api_utils.WorkoutData{}
+	err := r.DB.Get(&activity, "UPDATE workouts.activities SET group_id=$1 WHERE date=$2 RETURNING date, calories, distance, to_char(duration * interval '1 second', 'MI:SS.MS') as time, to_char(pace * interval '1 second', 'MI:SS.MS') as pace", groupId, date)
+	return activity, err
+}

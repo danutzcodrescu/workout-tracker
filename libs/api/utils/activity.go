@@ -86,3 +86,5 @@ type WorkoutWithLaps struct {
 	Laps json.RawMessage `json:"laps"`
 	WorkoutData
 }
+
+const ACTIVITY_API_VERSION = "v1"
